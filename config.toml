@@ -1,0 +1,5 @@
+baseURL = 'http://guesser.dev/'
+languageCode = 'en-us'
+title = 'Guesser'
+theme = "ananke"
+publishdir = "docs"
