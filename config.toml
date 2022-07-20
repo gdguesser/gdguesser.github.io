@@ -1,0 +1,4 @@
+baseURL = 'http://guesser.dev/'
+languageCode = 'en-us'
+title = 'Gabriel Guesser'
+theme = "ananke"
