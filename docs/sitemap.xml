@@ -2,16 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://guesser.dev/</loc>
-    <lastmod>2022-07-20T14:19:49+01:00</lastmod>
-  </url><url>
-    <loc>http://guesser.dev/posts/my-first-post/</loc>
-    <lastmod>2022-07-20T14:19:49+01:00</lastmod>
-  </url><url>
-    <loc>http://guesser.dev/posts/</loc>
-    <lastmod>2022-07-20T14:19:49+01:00</lastmod>
-  </url><url>
     <loc>http://guesser.dev/categories/</loc>
+  </url><url>
+    <loc>http://guesser.dev/</loc>
   </url><url>
     <loc>http://guesser.dev/tags/</loc>
   </url>
