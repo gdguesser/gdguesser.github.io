@@ -1,0 +1,88 @@
+---
+import { SITE_TITLE, SOCIAL_LINKS } from "../consts";
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  publishedAt: Date;
+  updatedAt?: Date | undefined;
+  tags: string[];
+  readingMinutes: number;
+}
+
+const { title, description, publishedAt, updatedAt, tags, readingMinutes } =
+  Astro.props;
+
+const formatter = new Intl.DateTimeFormat("en", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  datePublished: publishedAt.toISOString(),
+  dateModified: (updatedAt ?? publishedAt).toISOString(),
+  mainEntityOfPage: canonicalURL,
+  image: new URL("/og/guesser-dev.png", Astro.site).toString(),
+  author: {
+    "@type": "Person",
+    name: SITE_TITLE,
+    url: new URL("/", Astro.site).toString(),
+    sameAs: Object.values(SOCIAL_LINKS),
+  },
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  type="article"
+  publishedAt={publishedAt}
+  structuredData={structuredData}
+>
+  <article>
+    <header class="container article-header">
+      <a class="article-header__back" href="/writing/">
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m15 18-6-6 6-6"></path>
+        </svg>
+        All writing
+      </a>
+      <p class="section-kicker">Engineering notes</p>
+      <h1>{title}</h1>
+      <p class="article-header__description">{description}</p>
+      <div class="article-header__meta">
+        <time datetime={publishedAt.toISOString()}
+          >{formatter.format(publishedAt)}</time
+        >
+        <span>{readingMinutes} min read</span>
+        <span>{tags.join(" · ")}</span>
+      </div>
+    </header>
+
+    <div class="container prose">
+      <slot />
+    </div>
+
+    <aside class="container article-note" aria-label="Reference implementation">
+      This article accompanies the open-source
+      <a href="https://github.com/gdguesser/webhook-relay"
+        >webhook relay reference implementation</a
+      >. It is a learning project, not a claim of production readiness.
+    </aside>
+  </article>
+</BaseLayout>

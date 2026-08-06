@@ -1,0 +1,11 @@
+.astro
+dist
+node_modules
+package-lock.json
+playwright-report
+test-results
+public/og
+public/apple-touch-icon.png
+public/icon-192.png
+public/icon-512.png
+public/favicon-32.png

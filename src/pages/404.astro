@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The requested page could not be found on guesser.dev."
+  noindex
+>
+  <section class="container not-found" aria-labelledby="not-found-title">
+    <div>
+      <p class="not-found__code">HTTP 404 · ROUTE_NOT_FOUND</p>
+      <h1 id="not-found-title">This path ends here.</h1>
+      <p>
+        The page may have moved, or the address may be incorrect. The home page
+        and writing index are safe places to recover.
+      </p>
+      <div class="button-row" style="justify-content: center">
+        <a class="button" href="/">Go home</a>
+        <a class="button button--secondary" href="/writing/">Browse writing</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

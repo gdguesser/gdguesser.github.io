@@ -1,0 +1,430 @@
+---
+import { getCollection } from "astro:content";
+import { SITE_DESCRIPTION, SITE_TITLE, SOCIAL_LINKS } from "../consts";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const posts = (await getCollection("writing", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+const latestPost = posts[0];
+
+if (!latestPost) {
+  throw new Error(
+    "The home page requires at least one published writing entry.",
+  );
+}
+
+const dateFormatter = new Intl.DateTimeFormat("en", {
+  month: "short",
+  year: "numeric",
+});
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE_TITLE,
+  url: new URL("/", Astro.site).toString(),
+  image: new URL("/og/guesser-dev.png", Astro.site).toString(),
+  jobTitle: "Backend Engineer",
+  description: SITE_DESCRIPTION,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Porto",
+    addressCountry: "PT",
+  },
+  worksFor: {
+    "@type": "Organization",
+    name: "Mercedes-Benz.io",
+  },
+  sameAs: Object.values(SOCIAL_LINKS),
+  knowsAbout: [
+    "Kotlin",
+    "Spring Boot",
+    "TypeScript",
+    "Node.js",
+    "Apache Kafka",
+    "Amazon Web Services",
+    "Kubernetes",
+    "PostgreSQL",
+  ],
+};
+---
+
+<BaseLayout structuredData={structuredData}>
+  <section class="container hero" aria-labelledby="hero-title">
+    <div>
+      <p class="eyebrow">Backend &amp; platform engineer · Porto</p>
+      <h1 id="hero-title">Reliable systems, <span>clear trade-offs.</span></h1>
+      <p class="hero__lede">
+        I’m Gabriel Dietrich Guesser. I build event-driven services and the
+        platforms around them—designed to fail predictably, recover cleanly, and
+        stay understandable in production.
+      </p>
+      <div class="button-row">
+        <a class="button" href="#selected-work">
+          See selected work
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m9 18 6-6-6-6"></path>
+          </svg>
+        </a>
+        <a class="button button--secondary" href="/writing/"
+          >Read engineering notes</a
+        >
+      </div>
+    </div>
+
+    <div class="system-map" aria-hidden="true">
+      <div class="system-map__header">
+        <span>delivery.flow</span>
+        <span class="system-map__status">observable</span>
+      </div>
+      <div class="system-map__flow">
+        <div class="system-node">
+          <span class="system-node__dot"></span>
+          <span
+            ><strong>event.accepted</strong><small>durable boundary</small
+            ></span
+          >
+        </div>
+        <div class="system-node">
+          <span class="system-node__dot"></span>
+          <span
+            ><strong>outbox.committed</strong><small>same transaction</small
+            ></span
+          >
+        </div>
+        <div class="system-node">
+          <span class="system-node__dot"></span>
+          <span
+            ><strong>message.dispatched</strong><small>at least once</small
+            ></span
+          >
+        </div>
+        <div class="system-node">
+          <span class="system-node__dot"></span>
+          <span
+            ><strong>outcome.recorded</strong><small>traceable recovery</small
+            ></span
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="expertise" aria-labelledby="expertise-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">Expertise</p>
+          <h2 id="expertise-title">
+            From service code to the path it runs on.
+          </h2>
+        </div>
+        <p>
+          Backend engineering is more than endpoints. I focus on delivery
+          semantics, data boundaries, operability, and the tooling that keeps
+          changes safe.
+        </p>
+      </div>
+
+      <div class="expertise-grid">
+        <article class="card">
+          <span class="card__index">01 / Services</span>
+          <h3>Reliable backend systems</h3>
+          <p>
+            Explicit contracts, transactional boundaries, and tests around the
+            failure paths—not only the happy path.
+          </p>
+          <ul class="tag-list" aria-label="Backend technologies">
+            <li>Kotlin</li>
+            <li>Spring Boot</li>
+            <li>TypeScript</li>
+            <li>Node.js</li>
+            <li>PostgreSQL</li>
+            <li>Redis</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <span class="card__index">02 / Events</span>
+          <h3>Event-driven delivery</h3>
+          <p>
+            Idempotent consumers, outbox patterns, bounded retries, and
+            replayable operations for asynchronous workflows.
+          </p>
+          <ul class="tag-list" aria-label="Messaging technologies and patterns">
+            <li>Kafka</li>
+            <li>SQS</li>
+            <li>Outbox</li>
+            <li>Idempotency</li>
+            <li>Contract testing</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <span class="card__index">03 / Platform</span>
+          <h3>Operable by default</h3>
+          <p>
+            Cloud delivery with useful telemetry, controlled change, and
+            security checks built into the engineering loop.
+          </p>
+          <ul class="tag-list" aria-label="Platform technologies and practices">
+            <li>AWS</li>
+            <li>Kubernetes</li>
+            <li>GitOps</li>
+            <li>Observability</li>
+            <li>Security automation</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="current-role-title">
+    <div class="container">
+      <div class="role-panel">
+        <div class="role-panel__meta">
+          <span>Current role</span>
+          <strong>Backend Engineer<br />Mercedes-Benz.io</strong>
+        </div>
+        <div class="role-panel__content">
+          <p class="section-kicker">Working at platform scale</p>
+          <h2 id="current-role-title">Building dependable paths for change.</h2>
+          <p>
+            I work on backend and platform concerns for digital products,
+            collaborating across engineering disciplines to make services easier
+            to ship, observe, and operate.
+          </p>
+          <p>
+            The public through-line is simple: clear interfaces, deliberate
+            failure handling, and automation that removes risky manual work.
+            Employer systems and implementation details remain private.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="section"
+    id="selected-work"
+    aria-labelledby="selected-work-title"
+  >
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">Selected work</p>
+          <h2 id="selected-work-title">
+            A reference project with failure built in.
+          </h2>
+        </div>
+        <p>
+          Small enough to study, complete enough to expose the difficult
+          boundaries in webhook delivery.
+        </p>
+      </div>
+
+      <article class="feature-card">
+        <div class="feature-card__content">
+          <div class="feature-card__eyebrow">
+            <span>Open source · Kotlin</span>
+            <a
+              class="release-pill"
+              href="https://github.com/gdguesser/webhook-relay/releases/tag/v0.1.0"
+            >
+              v0.1.0
+            </a>
+          </div>
+          <h3>Webhook Relay</h3>
+          <p>
+            An original reference implementation for reliable webhook delivery.
+            It demonstrates the consistency and recovery mechanisms without
+            claiming production proof or benchmark results.
+          </p>
+          <ul class="feature-list">
+            <li>
+              Transactional PostgreSQL outbox with Kafka-compatible Redpanda
+              transport
+            </li>
+            <li>
+              HMAC-signed, at-least-once delivery with idempotent worker claims
+            </li>
+            <li>
+              Exponential full-jitter retries, dead-letter persistence, and
+              replay APIs
+            </li>
+            <li>
+              OpenAPI docs, structured logs, health checks, Prometheus metrics,
+              and containerized tests
+            </li>
+          </ul>
+          <div class="button-row">
+            <a class="button" href="https://github.com/gdguesser/webhook-relay">
+              View repository
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M7 17 17 7M7 7h10v10"></path>
+              </svg>
+            </a>
+            <a
+              class="button button--secondary"
+              href="/writing/reliable-webhook-delivery/"
+            >
+              Read the design notes
+            </a>
+          </div>
+        </div>
+
+        <div class="feature-card__visual" aria-hidden="true">
+          <div class="terminal-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="terminal-flow">
+            <p><code>POST /events</code> accepted</p>
+            <p><code>outbox</code> committed atomically</p>
+            <p><code>worker</code> claimed with lease</p>
+            <p><code>signature</code> HMAC-SHA256</p>
+            <p><code>retry</code> bounded + jittered</p>
+            <p><code>outcome</code> measured + persisted</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="open-source-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">Open source contribution</p>
+          <h2 id="open-source-title">Useful changes, contributed upstream.</h2>
+        </div>
+        <p>
+          Contributions are about improving a shared project—not claiming it as
+          your own.
+        </p>
+      </div>
+
+      <article class="contribution">
+        <div class="contribution__mark" aria-hidden="true">PR</div>
+        <div>
+          <h3>httpexpect · merged pull request #337</h3>
+          <p>
+            Contributed opt-in request and response controls to the project’s
+            default formatter, including end-to-end test coverage.
+          </p>
+        </div>
+        <a class="text-link" href="https://github.com/gavv/httpexpect/pull/337">
+          View merged PR
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M7 17 17 7M7 7h10v10"></path>
+          </svg>
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="writing-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">Writing</p>
+          <h2 id="writing-title">Notes that make the trade-offs explicit.</h2>
+        </div>
+        <p>
+          Practical explanations of backend reliability, with the awkward edge
+          cases left in.
+        </p>
+      </div>
+
+      <article class="writing-card">
+        <div>
+          <p class="writing-card__meta">
+            {dateFormatter.format(latestPost.data.publishedAt)} · Reliability
+          </p>
+          <h3>{latestPost.data.title}</h3>
+          <p>{latestPost.data.description}</p>
+        </div>
+        <a class="button button--secondary" href={`/writing/${latestPost.id}/`}>
+          Read article
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m9 18 6-6-6-6"></path>
+          </svg>
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="contact" aria-labelledby="contact-title">
+    <div class="container">
+      <div class="contact-panel">
+        <div>
+          <p class="section-kicker">Contact</p>
+          <h2 id="contact-title">Let’s compare notes.</h2>
+          <p>
+            The best way to reach me is through one of these public profiles.
+            I’m especially interested in reliable systems, developer platforms,
+            and thoughtful open-source work.
+          </p>
+        </div>
+        <div class="contact-links" aria-label="Social profiles">
+          <a href={SOCIAL_LINKS.github}>
+            GitHub
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 .7a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.2.8-.5v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.2 1.2a11.2 11.2 0 0 1 5.8 0C15.6 4.8 16.6 5 16.6 5c.6 1.6.2 2.9.1 3.2.8.8 1.2 1.8 1.2 3.1 0 4.4-2.8 5.4-5.5 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A11.5 11.5 0 0 0 12 .7Z"
+              ></path>
+            </svg>
+          </a>
+          <a href={SOCIAL_LINKS.linkedin}>
+            LinkedIn
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M20.5 3h-17A2.5 2.5 0 0 0 1 5.5v13A2.5 2.5 0 0 0 3.5 21h17a2.5 2.5 0 0 0 2.5-2.5v-13A2.5 2.5 0 0 0 20.5 3ZM8.3 18H5.4V9.4h2.9V18ZM6.9 8.2a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4ZM18.6 18h-2.9v-4.2c0-1 0-2.3-1.5-2.3s-1.7 1.1-1.7 2.2V18H9.7V9.4h2.7v1.2h.1c.4-.7 1.3-1.5 2.6-1.5 2.9 0 3.4 1.8 3.4 4.2V18Z"
+              ></path>
+            </svg>
+          </a>
+          <a href={SOCIAL_LINKS.x}>
+            X
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M18.9 2H22l-6.8 7.8L23.2 22H17l-4.8-6.3L6.7 22H3.6l7.1-8.2L3 2h6.4l4.4 5.8L18.9 2Zm-1.1 17.8h1.7L8.5 4H6.7l11.1 15.8Z"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

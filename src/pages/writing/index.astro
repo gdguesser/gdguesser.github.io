@@ -1,0 +1,60 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const posts = (await getCollection("writing", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+
+const formatter = new Intl.DateTimeFormat("en", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+});
+---
+
+<BaseLayout
+  title="Writing"
+  description="Engineering notes by Gabriel Dietrich Guesser about reliable backend systems, event-driven delivery, platform engineering, and operability."
+>
+  <header class="container page-header">
+    <p class="section-kicker">Writing</p>
+    <h1>Engineering notes, with the edges left in.</h1>
+    <p class="page-header__lede">
+      Practical explorations of reliability and platform work: the trade-offs,
+      failure modes, and limits that short summaries tend to omit. Subscribe
+      through the <a href="/rss.xml">RSS feed</a>.
+    </p>
+  </header>
+
+  <div class="container">
+    <ol class="writing-list">
+      {
+        posts.map((post) => (
+          <li class="writing-list__item">
+            <a href={`/writing/${post.id}/`}>
+              <time datetime={post.data.publishedAt.toISOString()}>
+                {formatter.format(post.data.publishedAt)}
+              </time>
+              <div>
+                <h2>{post.data.title}</h2>
+                <p>{post.data.description}</p>
+              </div>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</BaseLayout>

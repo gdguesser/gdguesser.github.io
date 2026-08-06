@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://guesser.dev/sitemap-index.xml
