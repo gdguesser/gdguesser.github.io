@@ -66,7 +66,7 @@ test("metadata and generated social image are complete", async ({
   await expect(page).toHaveTitle("Gabriel Dietrich Guesser");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     "content",
-    /backend and platform engineer/i,
+    /backend engineer/i,
   );
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     "href",

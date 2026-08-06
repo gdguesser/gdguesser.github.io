@@ -27,8 +27,8 @@ const ogCard = `
     </text>
     <text x="82" y="208" fill="#171a16" font-size="76" font-weight="750" letter-spacing="-3">Gabriel Dietrich</text>
     <text x="82" y="294" fill="#155f49" font-size="76" font-weight="750" letter-spacing="-3">Guesser</text>
-    <text x="86" y="362" fill="#555c54" font-size="30">Reliable event-driven systems.</text>
-    <text x="86" y="404" fill="#555c54" font-size="30">Clear trade-offs.</text>
+    <text x="86" y="362" fill="#555c54" font-size="30">Java, Kotlin, Spring Boot, AWS.</text>
+    <text x="86" y="404" fill="#555c54" font-size="30">Kafka, PostgreSQL, Kubernetes.</text>
     <rect x="82" y="495" width="232" height="54" rx="12" fill="#155f49"/>
     <text x="111" y="530" fill="#fffdf7" font-size="22" font-weight="700">Porto, Portugal</text>
   </g>

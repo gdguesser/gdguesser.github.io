@@ -1,6 +1,6 @@
 ---
 title: "Reliable webhook delivery: designing for the failures between systems"
-description: "A practical guide to transactional outboxes, at-least-once delivery, idempotency, jittered retries, dead letters, replay, signatures, and the limits that remain."
+description: "Notes from building Webhook Relay: transactional outboxes, at-least-once delivery, idempotency, retries, dead letters, replay, and request signing."
 publishedAt: 2026-08-06
 draft: false
 tags:
@@ -9,20 +9,17 @@ tags:
   - Kotlin
 ---
 
-A webhook looks simple from the outside: serialize an event, send an HTTP
-request, and mark it delivered. The difficult part is not the request. It is
-preserving a useful answer to three questions while processes, networks, and
-dependencies fail:
+I built [Webhook Relay](https://github.com/gdguesser/webhook-relay) because
+“send an HTTP request” hides most of the interesting work in webhook delivery.
+The project had to answer three questions:
 
 1. Did the system durably accept the event?
 2. Will every intended destination eventually be attempted?
 3. Can an operator understand and safely recover what did not succeed?
 
-This article develops one answer using the public
-[Webhook Relay reference implementation](https://github.com/gdguesser/webhook-relay).
-The project is deliberately small and not presented as production-proven. That
-makes it useful for examining the boundaries without pretending that a sample
-repository solves every operational problem.
+The repository is small enough to follow from the API to the worker. This is how
+I handled those boundaries and where the implementation still stops short of a
+production service.
 
 ## Start with a precise acceptance boundary
 
@@ -67,7 +64,7 @@ If the process dies before `COMMIT`, none of the work exists. If it dies after
 `COMMIT`, the outbox row remains available for another publisher pass. This
 closes the lost-work gap, but it does not make publishing exactly once.
 
-## At-least-once is the honest contract
+## Why the contract is at least once
 
 An outbox publisher normally performs two independent actions:
 
@@ -91,7 +88,7 @@ It cannot prove that arbitrary side effects behind an HTTP endpoint happened
 exactly once when the acknowledgment is lost. Naming the actual boundary is
 more valuable than applying the stronger label to the whole path.
 
-## Idempotency belongs at more than one layer
+## Idempotency at ingestion and delivery
 
 There are two different duplicate problems here.
 
@@ -133,7 +130,7 @@ An in-memory cache is not a durable deduplication boundary. A separate
 “processed” write made before or after the business transaction recreates a
 dual-write problem at the receiver.
 
-## Claim work so crashes are recoverable
+## Worker claims and leases
 
 Multiple workers should be able to process deliveries without routinely
 colliding. The project uses a database lease and a processing token when a
@@ -155,7 +152,7 @@ for scheduling delay, while still short enough to recover abandoned work. The
 system should expose lease-expiry and stale-result metrics; otherwise a tuning
 problem looks like random duplication.
 
-## Retry only failures that may improve
+## Deciding what to retry
 
 Retries are useful when another attempt has a reasonable chance of changing the
 outcome. Retrying every non-`2xx` response wastes capacity and delays operator
@@ -195,12 +192,11 @@ Retries also need a finite attempt budget. The project defaults to eight
 attempts and then dead-letters the delivery. An infinite retry loop is not
 reliability; it is an unbounded queue of work that may never succeed.
 
-One known limitation is that the current reference worker does not honor
-`Retry-After`. A production policy should consider a valid server-provided
-delay, clamp it to an acceptable range, and still apply overall retention and
-attempt limits.
+The worker currently ignores `Retry-After`. I would handle a valid
+server-provided delay in a production version, clamp it to an acceptable range,
+and still enforce the overall retention and attempt limits.
 
-## Dead letters are durable operational state
+## What goes into a dead letter
 
 After the retry budget is exhausted—or after an immediately terminal
 response—the system needs to retain more than a log line. A dead-letter record
@@ -221,7 +217,7 @@ redacted diagnostics and explicit retention. Payloads, outbox rows, and dead
 letters all need cleanup or archival policies; the reference project calls out
 that these policies are not automated.
 
-## Replay is a new operation, not erased history
+## Replaying a failed delivery
 
 Once an endpoint is repaired, an operator may want to replay a failed delivery.
 A safe replay should be explicit, auditable, and idempotent as an operation.
@@ -245,7 +241,7 @@ include API authentication, authorization, tenant isolation, quotas, or rate
 limiting. Those are prerequisites before placing such operations in a shared
 environment.
 
-## Sign the exact bytes sent
+## Signing the request body
 
 Transport encryption protects a request in transit, but a receiver may also
 need to verify that the request came from a holder of the endpoint secret and
@@ -279,7 +275,7 @@ audit events, and an external key-management strategy. The reference project
 encrypts endpoint secrets with AES-GCM, but does not implement master-key
 rotation or external KMS integration.
 
-## Observability should explain state transitions
+## Metrics and logs
 
 Request counts and process CPU are useful, but they do not answer whether the
 delivery pipeline is healthy. Observe the state machine.
@@ -310,7 +306,7 @@ can currently serve work. Marking a process dead because a dependency is
 temporarily unavailable can create restart loops precisely when the dependency
 needs less load.
 
-## Test the ambiguous moments
+## Tests around failure boundaries
 
 The happy path is easy to demonstrate. Reliability comes from tests around
 transaction and crash boundaries.
@@ -329,13 +325,12 @@ High-value cases include:
 - URL policy rejects private or reserved destinations.
 
 The project uses PostgreSQL Testcontainers for persistence behavior and
-WireMock for receiver, signature, and transient-failure scenarios. That is
-stronger evidence than mocks alone, but it remains test evidence—not a
-substitute for load tests, fault injection, and observation under real traffic.
+WireMock for receiver, signature, and transient-failure scenarios. These tests
+cover more than mocked units, but I have not run load or fault-injection tests.
 
-## The limitations are part of the design
+## What this project does not cover
 
-The reference repository intentionally leaves production concerns visible:
+The repository does not include:
 
 - no API authentication, authorization, tenant isolation, quotas, or rate limits;
 - no automated payload, outbox, or dead-letter cleanup;
@@ -347,15 +342,13 @@ The reference repository intentionally leaves production concerns visible:
   high-availability topology;
 - no load testing and no throughput or latency claims.
 
-There are also broader design choices a production team must make: ordering
-requirements, endpoint versioning, payload evolution, regional failover,
-privacy deletion, backpressure, per-tenant fairness, and incident ownership.
-Adding every mechanism by default can make a small system harder to reason
-about. Omitting one without naming the consequence is worse.
+There are other choices a production team would still need to make: ordering,
+endpoint versioning, payload evolution, regional failover, privacy deletion,
+backpressure, per-tenant fairness, and incident ownership.
 
-## A practical reliability contract
+## The resulting contract
 
-A defensible webhook service can make these promises:
+The contract I settled on is:
 
 1. Acceptance means the event and dispatch intent were committed together.
 2. Delivery is at least once, so receivers get a stable deduplication key.
@@ -366,6 +359,5 @@ A defensible webhook service can make these promises:
 7. Metrics describe backlog age and state transitions; logs carry identifiers.
 8. Limitations and missing controls are documented plainly.
 
-The result is not failure-free delivery. It is something more useful: a system
-whose uncertainty is bounded, whose duplicates are manageable, and whose
-failures can be understood and recovered without guessing.
+This does not remove failure or duplicates. It gives the sender, receiver, and
+operator clear behavior when they happen.

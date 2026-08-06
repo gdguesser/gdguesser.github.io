@@ -1,7 +1,7 @@
 export const SITE_TITLE = "Gabriel Dietrich Guesser";
 
 export const SITE_DESCRIPTION =
-  "Backend and platform engineer in Porto building reliable event-driven systems with Kotlin, TypeScript, cloud infrastructure, and pragmatic operations.";
+  "Backend engineer in Porto working with Java, Kotlin, Spring Boot, AWS, Kafka, PostgreSQL, and Kubernetes.";
 
 export const SOCIAL_LINKS = {
   github: "https://github.com/gdguesser",
