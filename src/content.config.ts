@@ -14,7 +14,7 @@ const writing = defineCollection({
     referenceProject: z
       .object({
         name: z.string(),
-        url: z.string().url(),
+        url: z.url(),
         descriptor: z.string().optional(),
       })
       .optional(),
