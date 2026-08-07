@@ -1,12 +1,16 @@
 ---
 title: "SQS is not a broadcast bus: fixing GraphQL subscription fan-out"
 description: "How competing SQS consumers can drop the notification a GraphQL client is waiting for, and the direct-SQS design I used instead."
-publishedAt: 2026-08-06
+publishedAt: 2026-08-07
 draft: false
 tags:
   - GraphQL
   - AWS
   - Reliability
+referenceProject:
+  name: "@gdguesser/graphql-sqs-pubsub"
+  url: "https://github.com/gdguesser/graphql-sqs-pubsub"
+  descriptor: "an open-source npm package that ships the design described above"
 ---
 
 I investigated an intermittent notification problem in a GraphQL application.

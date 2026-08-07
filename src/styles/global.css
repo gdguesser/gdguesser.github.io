@@ -774,6 +774,15 @@ main {
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
+.writing-card + .writing-card {
+  margin-top: 1.25rem;
+}
+
+.writing-card__more {
+  margin: 1.25rem 0 0;
+  text-align: right;
+}
+
 .writing-card__meta {
   margin-bottom: 1rem;
   color: var(--signal);

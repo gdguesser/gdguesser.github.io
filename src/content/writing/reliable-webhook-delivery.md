@@ -7,6 +7,10 @@ tags:
   - Reliability
   - Event-driven systems
   - Kotlin
+referenceProject:
+  name: "Webhook Relay"
+  url: "https://github.com/gdguesser/webhook-relay"
+  descriptor: "an open-source Kotlin and Spring Boot reference implementation"
 ---
 
 I built [Webhook Relay](https://github.com/gdguesser/webhook-relay) because

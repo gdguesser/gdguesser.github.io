@@ -2,6 +2,12 @@
 import { SITE_TITLE, SOCIAL_LINKS } from "../consts";
 import BaseLayout from "./BaseLayout.astro";
 
+interface ReferenceProject {
+  name: string;
+  url: string;
+  descriptor?: string;
+}
+
 interface Props {
   title: string;
   description: string;
@@ -9,10 +15,18 @@ interface Props {
   updatedAt?: Date | undefined;
   tags: string[];
   readingMinutes: number;
+  referenceProject?: ReferenceProject | undefined;
 }
 
-const { title, description, publishedAt, updatedAt, tags, readingMinutes } =
-  Astro.props;
+const {
+  title,
+  description,
+  publishedAt,
+  updatedAt,
+  tags,
+  readingMinutes,
+  referenceProject,
+} = Astro.props;
 
 const formatter = new Intl.DateTimeFormat("en", {
   day: "numeric",
@@ -78,11 +92,19 @@ const structuredData = {
       <slot />
     </div>
 
-    <aside class="container article-note" aria-label="Reference implementation">
-      This article accompanies the open-source
-      <a href="https://github.com/gdguesser/webhook-relay"
-        >webhook relay reference implementation</a
-      >. It is a learning project, not a claim of production readiness.
-    </aside>
+    {
+      referenceProject && (
+        <aside
+          class="container article-note"
+          aria-label="Reference implementation"
+        >
+          This article documents the design of{" "}
+          <a href={referenceProject.url}>{referenceProject.name}</a>
+          {referenceProject.descriptor
+            ? `, ${referenceProject.descriptor}.`
+            : ", an open-source reference implementation."}
+        </aside>
+      )
+    }
   </article>
 </BaseLayout>

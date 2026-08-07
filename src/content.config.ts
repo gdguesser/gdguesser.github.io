@@ -11,6 +11,13 @@ const writing = defineCollection({
     updatedAt: z.coerce.date().optional(),
     draft: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
+    referenceProject: z
+      .object({
+        name: z.string(),
+        url: z.string().url(),
+        descriptor: z.string().optional(),
+      })
+      .optional(),
   }),
 });
 
