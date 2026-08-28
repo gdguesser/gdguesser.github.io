@@ -74,6 +74,43 @@ const steps = [
       </p>
     </header>
 
+    <section class="course-howto" aria-labelledby="start-heading">
+      <h2 id="start-heading">Start here — clone the blank template</h2>
+      <p>
+        This course is a <strong>do</strong>, not a read. Clone the{" "}
+        <strong>blank starter project</strong> — Gradle, JUnit 5 and AssertJ are already
+        wired — and you build each chapter's package yourself:
+      </p>
+      <pre
+        class="course-howto__code"><code>{`git clone https://github.com/gdguesser/learn-java-with-tests-starter.git
+cd learn-java-with-tests-starter
+./gradlew test                     # toolchain ready, no tests yet`}</code></pre>
+      <p>
+        <code>./gradlew test</code> is the loop that drives every chapter; on Windows
+        use <code>gradlew.bat test</code>. Then open{" "}
+        <a href="/tdd/hello/">chapter 01</a> and create{" "}
+        <code>src/main/java/hello</code> and <code>src/test/java/hello</code>{
+          " "
+        }
+        yourself — your first failing run (a "cannot find symbol" compile error) will
+        be your first <strong>RED</strong>.
+      </p>
+      <p>
+        The{" "}
+        <a href="https://github.com/gdguesser/learn-java-with-tests"
+          >solutions repo</a
+        >{" "}
+        contains all 18 chapters written and tested — compare against it once a chapter
+        is green. Full setup walkthrough (JDK install, editors, troubleshooting):{
+          " "
+        }
+        <a
+          href="https://github.com/gdguesser/learn-java-with-tests#getting-started"
+          >Getting started</a
+        >.
+      </p>
+    </section>
+
     <section class="course-steps" aria-label="The TDD loop">
       {
         steps.map((step, i) => (
@@ -119,34 +156,6 @@ const steps = [
           ))
         }
       </ol>
-    </section>
-
-    <section class="course-howto">
-      <h2>Start here</h2>
-      <p>
-        The code companion lives at{" "}
-        <a href="https://github.com/gdguesser/learn-java-with-tests">
-          gdguesser/learn-java-with-tests
-        </a>
-        , organized one package per chapter. You need only JDK 21 — the Gradle wrapper
-        handles the rest:
-      </p>
-      <pre
-        class="course-howto__code"><code>{`git clone https://github.com/gdguesser/learn-java-with-tests.git
-cd learn-java-with-tests
-./gradlew test                    # whole course
-./gradlew test --tests "hello.*"  # one chapter`}</code></pre>
-      <p>
-        First run downloads Gradle and the test dependencies, then
-        <code>gradle test</code> is the feedback loop that drives every chapter: run
-        it after each change. Windows? Use{" "}
-        <code>gradlew.bat test</code>. Step-by-step setup — JDK install,
-        editors, how to practice each kata — is in the repo's README under
-        <a
-          href="https://github.com/gdguesser/learn-java-with-tests#getting-started"
-          >Getting started</a
-        >.
-      </p>
     </section>
   </div>
 </BaseLayout>
