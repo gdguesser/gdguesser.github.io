@@ -82,5 +82,47 @@
     "package": "mocking",
     "title": "Mocking",
     "description": "Hand-rolled fakes and spies — test the choreography, not the wait."
+  },
+  {
+    "order": 13,
+    "slug": "concurrency",
+    "package": "concurrency",
+    "title": "Concurrency",
+    "description": "ExecutorService, CompletableFuture, and virtual threads — submit everything, then join."
+  },
+  {
+    "order": 14,
+    "slug": "select",
+    "package": "select",
+    "title": "Select & timeouts",
+    "description": "CompletableFuture.anyOf to race tasks, plus timeouts that fail loudly."
+  },
+  {
+    "order": 15,
+    "slug": "sync",
+    "package": "sync",
+    "title": "Synchronization",
+    "description": "Data races, synchronized, LongAdder, and ConcurrentHashMap — correctness by construction."
+  },
+  {
+    "order": 16,
+    "slug": "reflection",
+    "package": "reflection",
+    "title": "Reflection",
+    "description": "Class, Field, and Method — the machinery behind frameworks you almost never need yourself."
+  },
+  {
+    "order": 17,
+    "slug": "webserver",
+    "package": "webserver",
+    "title": "Real project: an HTTP server",
+    "description": "The JDK's HttpServer and HttpClient — I/O at the edge, decisions in a testable core."
+  },
+  {
+    "order": 18,
+    "slug": "assertj",
+    "package": "assertj",
+    "title": "AssertJ",
+    "description": "Fluent assertions that read like sentences and fail with useful diffs."
   }
 ]
