@@ -10,16 +10,31 @@ interface Props {
 }
 
 const { title, description, chapters, slug } = Astro.props;
-const current = chapters.findIndex((chapter) => chapter.id === slug);
-const previous = current > 0 ? chapters[current - 1] : undefined;
+const sorted = [...chapters].sort((a, b) => a.data.order - b.data.order);
+const current = sorted.findIndex((chapter) => chapter.id === slug);
+const previous = current > 0 ? sorted[current - 1] : undefined;
 const next =
-  current >= 0 && current < chapters.length - 1
-    ? chapters[current + 1]
-    : undefined;
+  current >= 0 && current < sorted.length - 1 ? sorted[current + 1] : undefined;
 const number = current >= 0 ? current + 1 : undefined;
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  name: title,
+  description,
+  url: new URL(`/tdd/${slug}/`, Astro.site).toString(),
+  isPartOf: {
+    "@type": "Course",
+    name: "Learn Java with Tests",
+    url: new URL("/tdd/", Astro.site).toString(),
+  },
+};
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+  title={title}
+  description={description}
+  structuredData={structuredData}
+>
   <header class="course-hero">
     <div class="container">
       <a class="course-hero__title" href="/tdd/"> Learn Java with Tests </a>
@@ -36,7 +51,7 @@ const number = current >= 0 ? current + 1 : undefined;
     <aside class="course-sidebar" aria-label="Chapters">
       <ol>
         {
-          chapters.map((chapter) => {
+          sorted.map((chapter) => {
             const isCurrent = chapter.id === slug;
             return (
               <li aria-current={isCurrent ? "step" : undefined}>
@@ -58,7 +73,7 @@ const number = current >= 0 ? current + 1 : undefined;
         <p class="section-kicker">
           {
             number !== undefined
-              ? `Chapter ${number} of ${chapters.length}`
+              ? `Chapter ${number} of ${sorted.length}`
               : "Chapter"
           }
         </p>

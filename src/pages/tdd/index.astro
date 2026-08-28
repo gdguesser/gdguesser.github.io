@@ -1,10 +1,31 @@
 ---
 import { getCollection } from "astro:content";
+import { SITE_TITLE } from "../../consts";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const chapters = (await getCollection("tdd")).sort(
   (a, b) => a.data.order - b.data.order,
 );
+const canonicalURL = new URL("/tdd/", Astro.site).toString();
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  name: "Learn Java with Tests",
+  description:
+    "A test-driven development course for Java, inspired by Learn Go with Tests.",
+  url: canonicalURL,
+  provider: {
+    "@type": "Person",
+    name: SITE_TITLE,
+    url: new URL("/", Astro.site).toString(),
+  },
+  hasPart: chapters.map((chapter) => ({
+    "@type": "LearningResource",
+    name: chapter.data.title,
+    description: chapter.data.description,
+    url: new URL(`/tdd/${chapter.id}/`, Astro.site).toString(),
+  })),
+};
 const steps = [
   {
     title: "Write a failing test",
@@ -24,6 +45,7 @@ const steps = [
 <BaseLayout
   title="Learn Java with Tests"
   description="A test-driven development course for Java, inspired by Learn Go with Tests."
+  structuredData={structuredData}
 >
   <div class="container course-index">
     <header class="course-index__header">
@@ -112,9 +134,8 @@ const steps = [
         class="course-howto__code"><code>gradle test
 gradle test --tests "hello.*"</code></pre>
       <p>
-        In Go you type <code>go test</code>; in Java you type{" "}
-        <code>gradle test</code>. That single command is the loop that drives
-        the course.
+        <code>gradle test</code> is the feedback loop that drives the whole course:
+        run it after every change, chapter by chapter.
       </p>
     </section>
   </div>
