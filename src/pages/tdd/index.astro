@@ -122,20 +122,30 @@ const steps = [
     </section>
 
     <section class="course-howto">
-      <h2>Try it yourself</h2>
+      <h2>Start here</h2>
       <p>
         The code companion lives at{" "}
         <a href="https://github.com/gdguesser/learn-java-with-tests">
           gdguesser/learn-java-with-tests
         </a>
-        , organized one package per chapter. You need JDK 21 and Gradle:
+        , organized one package per chapter. You need only JDK 21 — the Gradle wrapper
+        handles the rest:
       </p>
       <pre
-        class="course-howto__code"><code>gradle test
-gradle test --tests "hello.*"</code></pre>
+        class="course-howto__code"><code>{`git clone https://github.com/gdguesser/learn-java-with-tests.git
+cd learn-java-with-tests
+./gradlew test                    # whole course
+./gradlew test --tests "hello.*"  # one chapter`}</code></pre>
       <p>
-        <code>gradle test</code> is the feedback loop that drives the whole course:
-        run it after every change, chapter by chapter.
+        First run downloads Gradle and the test dependencies, then
+        <code>gradle test</code> is the feedback loop that drives every chapter: run
+        it after each change. Windows? Use{" "}
+        <code>gradlew.bat test</code>. Step-by-step setup — JDK install,
+        editors, how to practice each kata — is in the repo's README under
+        <a
+          href="https://github.com/gdguesser/learn-java-with-tests#getting-started"
+          >Getting started</a
+        >.
       </p>
     </section>
   </div>
