@@ -1,0 +1,97 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  chapters: CollectionEntry<"tdd">[];
+  slug: string;
+}
+
+const { title, description, chapters, slug } = Astro.props;
+const current = chapters.findIndex((chapter) => chapter.id === slug);
+const previous = current > 0 ? chapters[current - 1] : undefined;
+const next =
+  current >= 0 && current < chapters.length - 1
+    ? chapters[current + 1]
+    : undefined;
+const number = current >= 0 ? current + 1 : undefined;
+---
+
+<BaseLayout title={title} description={description}>
+  <header class="course-hero">
+    <div class="container">
+      <a class="course-hero__title" href="/tdd/"> Learn Java with Tests </a>
+      <p class="course-hero__tagline">
+        A TDD course for Java, in the spirit of{" "}
+        <a href="https://quii.gitbook.io/learn-go-with-tests"
+          >Learn Go with Tests</a
+        >.
+      </p>
+    </div>
+  </header>
+
+  <div class="container course">
+    <aside class="course-sidebar" aria-label="Chapters">
+      <ol>
+        {
+          chapters.map((chapter) => {
+            const isCurrent = chapter.id === slug;
+            return (
+              <li aria-current={isCurrent ? "step" : undefined}>
+                <a href={`/tdd/${chapter.id}/`}>
+                  <span class="course-sidebar__num">
+                    {String(chapter.data.order).padStart(2, "0")}
+                  </span>
+                  <span>{chapter.data.title}</span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ol>
+    </aside>
+
+    <article class="course-article">
+      <header class="course-article__header">
+        <p class="section-kicker">
+          {
+            number !== undefined
+              ? `Chapter ${number} of ${chapters.length}`
+              : "Chapter"
+          }
+        </p>
+        <h1>{title}</h1>
+        <p class="course-article__description">{description}</p>
+      </header>
+
+      <div class="prose">
+        <slot />
+      </div>
+
+      <nav class="course-pager" aria-label="Chapter navigation">
+        {
+          previous ? (
+            <a class="course-pager__prev" href={`/tdd/${previous.id}/`}>
+              <span class="course-pager__label">Previous</span>
+              <span>{previous.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next ? (
+            <a class="course-pager__next" href={`/tdd/${next.id}/`}>
+              <span class="course-pager__label">Next</span>
+              <span>{next.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+      </nav>
+    </article>
+  </div>
+</BaseLayout>

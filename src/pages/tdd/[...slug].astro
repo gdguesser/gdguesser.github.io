@@ -1,0 +1,25 @@
+---
+import { getCollection, render } from "astro:content";
+import TddLayout from "../../layouts/TddLayout.astro";
+
+export async function getStaticPaths() {
+  const chapters = await getCollection("tdd");
+  return chapters.map((chapter) => ({
+    params: { slug: chapter.id },
+    props: { chapters, chapter },
+  }));
+}
+
+const { chapters, chapter } = Astro.props;
+const { Content } = await render(chapter);
+const paddedNumber = String(chapter.data.order).padStart(2, "0");
+---
+
+<TddLayout
+  title={`${paddedNumber} — ${chapter.data.title}`}
+  description={chapter.data.description}
+  chapters={chapters}
+  slug={chapter.id}
+>
+  <Content />
+</TddLayout>

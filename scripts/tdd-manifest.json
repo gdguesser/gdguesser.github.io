@@ -1,0 +1,86 @@
+[
+  {
+    "order": 1,
+    "slug": "hello",
+    "package": "hello",
+    "title": "Hello, world",
+    "description": "Your first JUnit test, assertEquals, and the RED-GREEN-REFACTOR loop."
+  },
+  {
+    "order": 2,
+    "slug": "integers",
+    "package": "integers",
+    "title": "Integers",
+    "description": "assertEquals on primitives and parameterized tests with @CsvSource."
+  },
+  {
+    "order": 3,
+    "slug": "iteration",
+    "package": "iteration",
+    "title": "Iteration",
+    "description": "Loops, StringBuilder, and refactoring to String.repeat."
+  },
+  {
+    "order": 4,
+    "slug": "collections",
+    "package": "collections",
+    "title": "Lists",
+    "description": "List.of, enhanced for-loops, and your first streams refactor."
+  },
+  {
+    "order": 5,
+    "slug": "structs",
+    "package": "structs",
+    "title": "Structs (records)",
+    "description": "Records as immutable data with behaviour, and float comparisons with a delta."
+  },
+  {
+    "order": 6,
+    "slug": "interfaces",
+    "package": "interfaces",
+    "title": "Interfaces",
+    "description": "Polymorphism behind a Shape contract, tested through the interface."
+  },
+  {
+    "order": 7,
+    "slug": "maps",
+    "package": "maps",
+    "title": "Maps",
+    "description": "Word counting with Map, merge, and a streams groupingBy refactor."
+  },
+  {
+    "order": 8,
+    "slug": "streams",
+    "package": "streams",
+    "title": "Streams",
+    "description": "filter, map, and reduce — the functional way to process collections."
+  },
+  {
+    "order": 9,
+    "slug": "optionals",
+    "package": "optionals",
+    "title": "Optionals",
+    "description": "Designing absence with Optional instead of null."
+  },
+  {
+    "order": 10,
+    "slug": "exceptions",
+    "package": "exceptions",
+    "title": "Exceptions",
+    "description": "assertThrows, assertAll, and exceptions as part of the contract."
+  },
+  {
+    "order": 11,
+    "slug": "di",
+    "package": "di",
+    "title": "Dependency injection",
+    "description": "Constructor injection, @FunctionalInterface, and the composition root."
+  },
+  {
+    "order": 12,
+    "slug": "mocking",
+    "package": "mocking",
+    "title": "Mocking",
+    "description": "Hand-rolled fakes and spies — test the choreography, not the wait."
+  }
+]

@@ -21,4 +21,14 @@ const writing = defineCollection({
   }),
 });
 
-export const collections = { writing };
+const tdd = defineCollection({
+  loader: glob({ base: "./src/content/tdd", pattern: "**/*.md" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    order: z.number(),
+    package: z.string(),
+  }),
+});
+
+export const collections = { writing, tdd };

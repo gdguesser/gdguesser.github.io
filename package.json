@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "generate:assets": "node scripts/generate-assets.mjs",
+    "tdd:sync": "node scripts/sync-tdd.mjs",
     "prebuild": "npm run generate:assets",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",

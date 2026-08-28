@@ -27,6 +27,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImageURL = new URL(image, Astro.site);
 const isHome = Astro.url.pathname === "/";
 const isWriting = Astro.url.pathname.startsWith("/writing");
+const isTdd = Astro.url.pathname.startsWith("/tdd");
 const currentYear = new Date().getFullYear();
 ---
 
@@ -135,6 +136,9 @@ const currentYear = new Date().getFullYear();
               <a href="/writing/" aria-current={isWriting ? "page" : undefined}
                 >Writing</a
               >
+            </li>
+            <li>
+              <a href="/tdd/" aria-current={isTdd ? "page" : undefined}>TDD</a>
             </li>
             <li><a href="/#contact">Contact</a></li>
           </ul>

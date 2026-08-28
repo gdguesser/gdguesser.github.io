@@ -1,0 +1,121 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const chapters = (await getCollection("tdd")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const steps = [
+  {
+    title: "Write a failing test",
+    body: "Describe one piece of behaviour as a test before any production code exists.",
+  },
+  {
+    title: "Make it pass",
+    body: "Write the minimum code to satisfy the test — no more than that.",
+  },
+  {
+    title: "Refactor",
+    body: "Clean up the code while the green tests keep you safe. Repeat.",
+  },
+];
+---
+
+<BaseLayout
+  title="Learn Java with Tests"
+  description="A test-driven development course for Java, inspired by Learn Go with Tests."
+>
+  <div class="container course-index">
+    <header class="course-index__header">
+      <a class="course-index__back" href="/">
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m15 18-6-6 6-6"></path>
+        </svg>
+        Home
+      </a>
+      <p class="section-kicker">Course</p>
+      <h1>Learn Java with Tests</h1>
+      <p class="course-index__lede">
+        A test-driven development course for Java, inspired by{" "}
+        <a href="https://quii.gitbook.io/learn-go-with-tests"
+          >Learn Go with Tests</a
+        >. Every chapter is a tiny, self-contained package: read the failing
+        test, implement the minimum to make it pass, refactor.
+      </p>
+    </header>
+
+    <section class="course-steps" aria-label="The TDD loop">
+      {
+        steps.map((step, i) => (
+          <div class="course-steps__card">
+            <span class="course-steps__num">{i + 1}</span>
+            <h2>{step.title}</h2>
+            <p>{step.body}</p>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="course-chapters" aria-labelledby="chapters-heading">
+      <h2 id="chapters-heading">Chapters</h2>
+      <ol class="course-list">
+        {
+          chapters.map((chapter) => (
+            <li>
+              <a href={`/tdd/${chapter.id}/`}>
+                <span class="course-list__num">
+                  {String(chapter.data.order).padStart(2, "0")}
+                </span>
+                <span class="course-list__body">
+                  <span class="course-list__title">{chapter.data.title}</span>
+                  <span class="course-list__desc">
+                    {chapter.data.description}
+                  </span>
+                </span>
+                <svg
+                  class="course-list__arrow"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="course-howto">
+      <h2>Try it yourself</h2>
+      <p>
+        The code companion lives at{" "}
+        <a href="https://github.com/gdguesser/learn-java-with-tests">
+          gdguesser/learn-java-with-tests
+        </a>
+        , organized one package per chapter. You need JDK 21 and Gradle:
+      </p>
+      <pre
+        class="course-howto__code"><code>gradle test
+gradle test --tests "hello.*"</code></pre>
+      <p>
+        In Go you type <code>go test</code>; in Java you type{" "}
+        <code>gradle test</code>. That single command is the loop that drives
+        the course.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
