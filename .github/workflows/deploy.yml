@@ -36,15 +36,10 @@ jobs:
         run: npm ci
 
       - name: Check out course content
-        id: course-checkout
-        uses: actions/checkout@v7
-        with:
-          repository: gdguesser/learn-java-with-tests
-          path: ../learn-java-with-tests
+        run: git clone --depth 1 https://github.com/gdguesser/learn-java-with-tests.git "$RUNNER_TEMP/learn-java-with-tests"
 
       - name: Sync TDD course content
-        if: steps.course-checkout.outcome == 'success'
-        run: npm run tdd:sync
+        run: TDD_SRC="$RUNNER_TEMP/learn-java-with-tests" npm run tdd:sync
 
       - name: Check Astro and TypeScript
         run: npm run check
